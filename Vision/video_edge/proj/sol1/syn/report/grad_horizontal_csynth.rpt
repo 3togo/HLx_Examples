@@ -1,0 +1,161 @@
+
+
+================================================================
+== Vivado HLS Report for 'grad_horizontal'
+================================================================
+* Date:           Mon Jan 21 18:53:37 2019
+
+* Version:        2018.3 (Build 2405991 on Thu Dec 06 23:56:15 MST 2018)
+* Project:        proj
+* Solution:       sol1
+* Product family: zynq
+* Target device:  xc7z020clg484-1
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |   6.00|     5.089|        0.75|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +--------+--------+--------+--------+---------+
+    |     Latency     |     Interval    | Pipeline|
+    |   min  |   max  |   min  |   max  |   Type  |
+    +--------+--------+--------+--------+---------+
+    |  151187|  151187|  151187|  151187|   none  |
+    +--------+--------+--------+--------+---------+
+
+    + Detail: 
+        * Instance: 
+        +---------------------+----------+--------+--------+--------+--------+---------+
+        |                     |          |     Latency     |     Interval    | Pipeline|
+        |       Instance      |  Module  |   min  |   max  |   min  |   max  |   Type  |
+        +---------------------+----------+--------+--------+--------+--------+---------+
+        |grp_Filter2D_fu_118  |Filter2D  |  151186|  151186|  151186|  151186|   none  |
+        +---------------------+----------+--------+--------+--------+--------+---------+
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+-------+--------+-------+
+|       Name      | BRAM_18K| DSP48E|   FF   |  LUT  |
++-----------------+---------+-------+--------+-------+
+|DSP              |        -|      -|       -|      -|
+|Expression       |        -|      -|       0|      2|
+|FIFO             |        -|      -|       -|      -|
+|Instance         |       12|     42|    3259|   3470|
+|Memory           |        -|      -|       -|      -|
+|Multiplexer      |        -|      -|       -|     78|
+|Register         |        -|      -|       4|      -|
++-----------------+---------+-------+--------+-------+
+|Total            |       12|     42|    3263|   3550|
++-----------------+---------+-------+--------+-------+
+|Available        |      280|    220|  106400|  53200|
++-----------------+---------+-------+--------+-------+
+|Utilization (%)  |        4|     19|       3|      6|
++-----------------+---------+-------+--------+-------+
+
++ Detail: 
+    * Instance: 
+    +---------------------+----------+---------+-------+------+------+
+    |       Instance      |  Module  | BRAM_18K| DSP48E|  FF  |  LUT |
+    +---------------------+----------+---------+-------+------+------+
+    |grp_Filter2D_fu_118  |Filter2D  |       12|     42|  3259|  3470|
+    +---------------------+----------+---------+-------+------+------+
+    |Total                |          |       12|     42|  3259|  3470|
+    +---------------------+----------+---------+-------+------+------+
+
+    * DSP48: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +-----------------+----------+-------+---+----+------------+------------+
+    |  Variable Name  | Operation| DSP48E| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +-----------------+----------+-------+---+----+------------+------------+
+    |ap_block_state1  |    or    |      0|  0|   2|           1|           1|
+    +-----------------+----------+-------+---+----+------------+------------+
+    |Total            |          |      0|  0|   2|           1|           1|
+    +-----------------+----------+-------+---+----+------------+------------+
+
+    * Multiplexer: 
+    +-------------------------------+----+-----------+-----+-----------+
+    |              Name             | LUT| Input Size| Bits| Total Bits|
+    +-------------------------------+----+-----------+-----+-----------+
+    |ap_NS_fsm                      |  15|          3|    1|          3|
+    |ap_done                        |   9|          2|    1|          2|
+    |img_in_data_stream_0_V_read    |   9|          2|    1|          2|
+    |img_in_data_stream_1_V_read    |   9|          2|    1|          2|
+    |img_in_data_stream_2_V_read    |   9|          2|    1|          2|
+    |img_out_data_stream_0_V_write  |   9|          2|    1|          2|
+    |img_out_data_stream_1_V_write  |   9|          2|    1|          2|
+    |img_out_data_stream_2_V_write  |   9|          2|    1|          2|
+    +-------------------------------+----+-----------+-----+-----------+
+    |Total                          |  78|         17|    8|         17|
+    +-------------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +----------------------------------+---+----+-----+-----------+
+    |               Name               | FF| LUT| Bits| Const Bits|
+    +----------------------------------+---+----+-----+-----------+
+    |ap_CS_fsm                         |  2|   0|    2|          0|
+    |ap_done_reg                       |  1|   0|    1|          0|
+    |grp_Filter2D_fu_118_ap_start_reg  |  1|   0|    1|          0|
+    +----------------------------------+---+----+-----+-----------+
+    |Total                             |  4|   0|    4|          0|
+    +----------------------------------+---+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++--------------------------------+-----+-----+------------+-------------------------+--------------+
+|            RTL Ports           | Dir | Bits|  Protocol  |      Source Object      |    C Type    |
++--------------------------------+-----+-----+------------+-------------------------+--------------+
+|ap_clk                          |  in |    1| ap_ctrl_hs |     grad_horizontal     | return value |
+|ap_rst                          |  in |    1| ap_ctrl_hs |     grad_horizontal     | return value |
+|ap_start                        |  in |    1| ap_ctrl_hs |     grad_horizontal     | return value |
+|ap_done                         | out |    1| ap_ctrl_hs |     grad_horizontal     | return value |
+|ap_continue                     |  in |    1| ap_ctrl_hs |     grad_horizontal     | return value |
+|ap_idle                         | out |    1| ap_ctrl_hs |     grad_horizontal     | return value |
+|ap_ready                        | out |    1| ap_ctrl_hs |     grad_horizontal     | return value |
+|img_in_data_stream_0_V_dout     |  in |    8|   ap_fifo  |  img_in_data_stream_0_V |    pointer   |
+|img_in_data_stream_0_V_empty_n  |  in |    1|   ap_fifo  |  img_in_data_stream_0_V |    pointer   |
+|img_in_data_stream_0_V_read     | out |    1|   ap_fifo  |  img_in_data_stream_0_V |    pointer   |
+|img_in_data_stream_1_V_dout     |  in |    8|   ap_fifo  |  img_in_data_stream_1_V |    pointer   |
+|img_in_data_stream_1_V_empty_n  |  in |    1|   ap_fifo  |  img_in_data_stream_1_V |    pointer   |
+|img_in_data_stream_1_V_read     | out |    1|   ap_fifo  |  img_in_data_stream_1_V |    pointer   |
+|img_in_data_stream_2_V_dout     |  in |    8|   ap_fifo  |  img_in_data_stream_2_V |    pointer   |
+|img_in_data_stream_2_V_empty_n  |  in |    1|   ap_fifo  |  img_in_data_stream_2_V |    pointer   |
+|img_in_data_stream_2_V_read     | out |    1|   ap_fifo  |  img_in_data_stream_2_V |    pointer   |
+|img_out_data_stream_0_V_din     | out |    8|   ap_fifo  | img_out_data_stream_0_V |    pointer   |
+|img_out_data_stream_0_V_full_n  |  in |    1|   ap_fifo  | img_out_data_stream_0_V |    pointer   |
+|img_out_data_stream_0_V_write   | out |    1|   ap_fifo  | img_out_data_stream_0_V |    pointer   |
+|img_out_data_stream_1_V_din     | out |    8|   ap_fifo  | img_out_data_stream_1_V |    pointer   |
+|img_out_data_stream_1_V_full_n  |  in |    1|   ap_fifo  | img_out_data_stream_1_V |    pointer   |
+|img_out_data_stream_1_V_write   | out |    1|   ap_fifo  | img_out_data_stream_1_V |    pointer   |
+|img_out_data_stream_2_V_din     | out |    8|   ap_fifo  | img_out_data_stream_2_V |    pointer   |
+|img_out_data_stream_2_V_full_n  |  in |    1|   ap_fifo  | img_out_data_stream_2_V |    pointer   |
+|img_out_data_stream_2_V_write   | out |    1|   ap_fifo  | img_out_data_stream_2_V |    pointer   |
++--------------------------------+-----+-----+------------+-------------------------+--------------+
+

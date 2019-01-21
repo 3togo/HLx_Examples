@@ -1,0 +1,173 @@
+
+
+================================================================
+== Vivado HLS Report for 'image_filter'
+================================================================
+* Date:           Mon Jan 21 18:53:40 2019
+
+* Version:        2018.3 (Build 2405991 on Thu Dec 06 23:56:15 MST 2018)
+* Project:        proj
+* Solution:       sol1
+* Product family: zynq
+* Target device:  xc7z020clg484-1
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing (ns): 
+    * Summary: 
+    +--------+-------+----------+------------+
+    |  Clock | Target| Estimated| Uncertainty|
+    +--------+-------+----------+------------+
+    |ap_clk  |   6.00|     5.250|        0.75|
+    +--------+-------+----------+------------+
+
++ Latency (clock cycles): 
+    * Summary: 
+    +--------+--------+--------+--------+----------+
+    |     Latency     |     Interval    | Pipeline |
+    |   min  |   max  |   min  |   max  |   Type   |
+    +--------+--------+--------+--------+----------+
+    |  151190|  151190|  151188|  151188| dataflow |
+    +--------+--------+--------+--------+----------+
+
+    + Detail: 
+        * Instance: 
+        +----------------------+---------------------+--------+--------+--------+--------+---------------------------------------------+
+        |                      |                     |     Latency     |     Interval    |                   Pipeline                  |
+        |       Instance       |        Module       |   min  |   max  |   min  |   max  |                     Type                    |
+        +----------------------+---------------------+--------+--------+--------+--------+---------------------------------------------+
+        |grad_vertical_Mat_U0  |grad_vertical_Mat_s  |  151187|  151187|  151187|  151187|                     none                    |
+        |grad_horizontal_U0    |grad_horizontal      |  151187|  151187|  151187|  151187|                     none                    |
+        |AXIvideo2Mat_U0       |AXIvideo2Mat         |   49503|   49503|   49503|   49503|                     none                    |
+        |add_with_color_U0     |add_with_color       |   48401|   48402|   48400|   48400| loop rewind(delay=0 initiation interval(s)) |
+        |Mat2AXIvideo_U0       |Mat2AXIvideo         |   49281|   49281|   49281|   49281|                     none                    |
+        |replicate_by2_U0      |replicate_by2        |   48399|   48400|   48399|   48400|                     none                    |
+        +----------------------+---------------------+--------+--------+--------+--------+---------------------------------------------+
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+-------+--------+-------+
+|       Name      | BRAM_18K| DSP48E|   FF   |  LUT  |
++-----------------+---------+-------+--------+-------+
+|DSP              |        -|      -|       -|      -|
+|Expression       |        -|      -|       0|      4|
+|FIFO             |        0|      -|      90|    360|
+|Instance         |       24|     84|    7034|   8423|
+|Memory           |        -|      -|       -|      -|
+|Multiplexer      |        -|      -|       -|      -|
+|Register         |        -|      -|       -|      -|
++-----------------+---------+-------+--------+-------+
+|Total            |       24|     84|    7124|   8787|
++-----------------+---------+-------+--------+-------+
+|Available        |      280|    220|  106400|  53200|
++-----------------+---------+-------+--------+-------+
+|Utilization (%)  |        8|     38|       6|     16|
++-----------------+---------+-------+--------+-------+
+
++ Detail: 
+    * Instance: 
+    +----------------------+---------------------+---------+-------+------+------+
+    |       Instance       |        Module       | BRAM_18K| DSP48E|  FF  |  LUT |
+    +----------------------+---------------------+---------+-------+------+------+
+    |AXIvideo2Mat_U0       |AXIvideo2Mat         |        0|      0|   311|   472|
+    |Mat2AXIvideo_U0       |Mat2AXIvideo         |        0|      0|   128|   357|
+    |add_with_color_U0     |add_with_color       |        0|      0|    48|   322|
+    |grad_horizontal_U0    |grad_horizontal      |       12|     42|  3263|  3550|
+    |grad_vertical_Mat_U0  |grad_vertical_Mat_s  |       12|     42|  3264|  3559|
+    |replicate_by2_U0      |replicate_by2        |        0|      0|    20|   163|
+    +----------------------+---------------------+---------+-------+------+------+
+    |Total                 |                     |       24|     84|  7034|  8423|
+    +----------------------+---------------------+---------+-------+------+------+
+
+    * DSP48: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    +------------------------+---------+---+----+------+-----+---------+
+    |          Name          | BRAM_18K| FF| LUT| Depth| Bits| Size:D*B|
+    +------------------------+---------+---+----+------+-----+---------+
+    |img_0_data_stream_0_U   |        0|  5|  20|     2|    8|       16|
+    |img_0_data_stream_1_U   |        0|  5|  20|     2|    8|       16|
+    |img_0_data_stream_2_U   |        0|  5|  20|     2|    8|       16|
+    |img_1a_data_stream_0_U  |        0|  5|  20|     2|    8|       16|
+    |img_1a_data_stream_1_U  |        0|  5|  20|     2|    8|       16|
+    |img_1a_data_stream_2_U  |        0|  5|  20|     2|    8|       16|
+    |img_1b_data_stream_0_U  |        0|  5|  20|     2|    8|       16|
+    |img_1b_data_stream_1_U  |        0|  5|  20|     2|    8|       16|
+    |img_1b_data_stream_2_U  |        0|  5|  20|     2|    8|       16|
+    |img_2a_data_stream_0_U  |        0|  5|  20|     2|    8|       16|
+    |img_2a_data_stream_1_U  |        0|  5|  20|     2|    8|       16|
+    |img_2a_data_stream_2_U  |        0|  5|  20|     2|    8|       16|
+    |img_2b_data_stream_0_U  |        0|  5|  20|     2|    8|       16|
+    |img_2b_data_stream_1_U  |        0|  5|  20|     2|    8|       16|
+    |img_2b_data_stream_2_U  |        0|  5|  20|     2|    8|       16|
+    |img_3_data_stream_0_U   |        0|  5|  20|     2|    8|       16|
+    |img_3_data_stream_1_U   |        0|  5|  20|     2|    8|       16|
+    |img_3_data_stream_2_U   |        0|  5|  20|     2|    8|       16|
+    +------------------------+---------+---+----+------+-----+---------+
+    |Total                   |        0| 90| 360|    36|  144|      288|
+    +------------------------+---------+---+----+------+-----+---------+
+
+    * Expression: 
+    +-------------------------------+----------+-------+---+----+------------+------------+
+    |         Variable Name         | Operation| DSP48E| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +-------------------------------+----------+-------+---+----+------------+------------+
+    |ap_idle                        |    and   |      0|  0|   2|           1|           1|
+    |replicate_by2_U0_start_full_n  |    and   |      0|  0|   2|           1|           1|
+    +-------------------------------+----------+-------+---+----+------------+------------+
+    |Total                          |          |      0|  0|   4|           2|           2|
+    +-------------------------------+----------+-------+---+----+------------+------------+
+
+    * Multiplexer: 
+    N/A
+
+    * Register: 
+    N/A
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++----------------------+-----+-----+------------+--------------------+--------------+
+|       RTL Ports      | Dir | Bits|  Protocol  |    Source Object   |    C Type    |
++----------------------+-----+-----+------------+--------------------+--------------+
+|INPUT_STREAM_TDATA    |  in |   32|    axis    |  VIDEO_IN_V_data_V |    pointer   |
+|INPUT_STREAM_TKEEP    |  in |    4|    axis    |  VIDEO_IN_V_keep_V |    pointer   |
+|INPUT_STREAM_TSTRB    |  in |    4|    axis    |  VIDEO_IN_V_strb_V |    pointer   |
+|INPUT_STREAM_TUSER    |  in |    1|    axis    |  VIDEO_IN_V_user_V |    pointer   |
+|INPUT_STREAM_TLAST    |  in |    1|    axis    |  VIDEO_IN_V_last_V |    pointer   |
+|INPUT_STREAM_TID      |  in |    1|    axis    |   VIDEO_IN_V_id_V  |    pointer   |
+|INPUT_STREAM_TDEST    |  in |    1|    axis    |  VIDEO_IN_V_dest_V |    pointer   |
+|INPUT_STREAM_TVALID   |  in |    1|    axis    |  VIDEO_IN_V_dest_V |    pointer   |
+|INPUT_STREAM_TREADY   | out |    1|    axis    |  VIDEO_IN_V_dest_V |    pointer   |
+|OUTPUT_STREAM_TDATA   | out |   32|    axis    | VIDEO_OUT_V_data_V |    pointer   |
+|OUTPUT_STREAM_TKEEP   | out |    4|    axis    | VIDEO_OUT_V_keep_V |    pointer   |
+|OUTPUT_STREAM_TSTRB   | out |    4|    axis    | VIDEO_OUT_V_strb_V |    pointer   |
+|OUTPUT_STREAM_TUSER   | out |    1|    axis    | VIDEO_OUT_V_user_V |    pointer   |
+|OUTPUT_STREAM_TLAST   | out |    1|    axis    | VIDEO_OUT_V_last_V |    pointer   |
+|OUTPUT_STREAM_TID     | out |    1|    axis    |  VIDEO_OUT_V_id_V  |    pointer   |
+|OUTPUT_STREAM_TDEST   | out |    1|    axis    | VIDEO_OUT_V_dest_V |    pointer   |
+|OUTPUT_STREAM_TVALID  | out |    1|    axis    | VIDEO_OUT_V_dest_V |    pointer   |
+|OUTPUT_STREAM_TREADY  |  in |    1|    axis    | VIDEO_OUT_V_dest_V |    pointer   |
+|ap_clk                |  in |    1| ap_ctrl_hs |    image_filter    | return value |
+|ap_rst_n              |  in |    1| ap_ctrl_hs |    image_filter    | return value |
+|ap_start              |  in |    1| ap_ctrl_hs |    image_filter    | return value |
+|ap_done               | out |    1| ap_ctrl_hs |    image_filter    | return value |
+|ap_ready              | out |    1| ap_ctrl_hs |    image_filter    | return value |
+|ap_idle               | out |    1| ap_ctrl_hs |    image_filter    | return value |
++----------------------+-----+-----+------------+--------------------+--------------+
+

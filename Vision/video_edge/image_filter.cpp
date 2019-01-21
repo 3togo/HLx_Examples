@@ -2,28 +2,28 @@
 Copyright (c) 2016, Xilinx, Inc.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without modification, 
+Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
-1. Redistributions of source code must retain the above copyright notice, 
+1. Redistributions of source code must retain the above copyright notice,
 this list of conditions and the following disclaimer.
 
-2. Redistributions in binary form must reproduce the above copyright notice, 
-this list of conditions and the following disclaimer in the documentation 
+2. Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation
 and/or other materials provided with the distribution.
 
-3. Neither the name of the copyright holder nor the names of its contributors 
-may be used to endorse or promote products derived from this software 
+3. Neither the name of the copyright holder nor the names of its contributors
+may be used to endorse or promote products derived from this software
 without specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, 
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
-INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, 
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
-HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ************************************************/
 
@@ -33,8 +33,11 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 void image_filter(AXI_STREAM& INPUT_STREAM, AXI_STREAM& OUTPUT_STREAM) {
 
-#pragma HLS INTERFACE axis depth=10000 port=INPUT_STREAM bundle=VIDEO_IN
-#pragma HLS INTERFACE axis depth=10000 port=OUTPUT_STREAM bundle=VIDEO_OUT
+#pragma HLS INTERFACE axis port=INPUT_STREAM bundle=VIDEO_IN
+#pragma HLS INTERFACE axis port=OUTPUT_STREAM bundle=VIDEO_OUT
+//#pragma HLS INTERFACE axis depth=10000 port=INPUT_STREAM bundle=VIDEO_IN
+//#pragma HLS INTERFACE axis depth=10000 port=OUTPUT_STREAM bundle=VIDEO_OUT
+
 //#pragma HLS INTERFACE s_axilite port=return   bundle=CONTROL_BUS
 
 //#pragma HLS INTERFACE s_axilite port=rows     bundle=CONTROL_BUS //offset=0x14
@@ -43,7 +46,7 @@ void image_filter(AXI_STREAM& INPUT_STREAM, AXI_STREAM& OUTPUT_STREAM) {
 //#pragma HLS INTERFACE ap_stable port=cols
 
 #pragma HLS dataflow
-  
+
 //assert(rows <= MAX_HEIGHT);
 //assert(cols <= MAX_WIDTH);
 const int rows = MAX_HEIGHT;
@@ -84,8 +87,13 @@ hls::Mat2AXIvideo(img_3, OUTPUT_STREAM);
 #if 0
 void image_filter_problem(AXI_STREAM& INPUT_STREAM, AXI_STREAM& OUTPUT_STREAM) {
 
-#pragma HLS INTERFACE axis depth=2000000 port=INPUT_STREAM bundle=VIDEO_IN
-#pragma HLS INTERFACE axis depth=2000000 port=OUTPUT_STREAM bundle=VIDEO_OUT
+#pragma HLS INTERFACE axis port=INPUT_STREAM bundle=VIDEO_IN
+#pragma HLS INTERFACE axis port=OUTPUT_STREAM bundle=VIDEO_OUT
+
+//#pragma HLS INTERFACE axis depth=2000000 port=INPUT_STREAM bundle=VIDEO_IN
+//#pragma HLS INTERFACE axis depth=2000000 port=OUTPUT_STREAM bundle=VIDEO_OUT
+
+
 //#pragma HLS INTERFACE axis depth=10000 port=INPUT_STREAM bundle=VIDEO_IN
 //#pragma HLS INTERFACE axis depth=10000 port=OUTPUT_STREAM bundle=VIDEO_OUT
 //#pragma HLS INTERFACE axis port=INPUT_STREAM bundle=VIDEO_IN
@@ -99,7 +107,7 @@ void image_filter_problem(AXI_STREAM& INPUT_STREAM, AXI_STREAM& OUTPUT_STREAM) {
 //#pragma HLS INTERFACE ap_stable port=cols
 
 #pragma HLS dataflow
-  
+
 //assert(rows <= MAX_HEIGHT);
 //assert(cols <= MAX_WIDTH);
 const int rows = MAX_HEIGHT;
@@ -173,27 +181,27 @@ hls::Mat2AXIvideo(img_6, OUTPUT_STREAM);
 // decimate image by 2 in row/col
 //
 void resize_img(
-	GRAY_IMAGE& img_in, 
-	GRAY_IMAGE_HALF& img_out, 
-	int rows, 
-	int cols) {
+    GRAY_IMAGE& img_in,
+    GRAY_IMAGE_HALF& img_out,
+    int rows,
+    int cols) {
 
 GRAY_PIXEL pin;
 GRAY_PIXEL pout;
 
 L_row: for(int row = 0; row < rows; row++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1080
-		 
+
 L_col: for(int col = 0; col < cols; col++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1920
 #pragma HLS pipeline rewind
 
            img_in >> pin;
 
-		   if ( (row %2 == 0) & (col %2 == 0)) {
-		       pout = pin;
+           if ( (row %2 == 0) & (col %2 == 0)) {
+               pout = pin;
                img_out << pout;
-		   }
+           }
         }
     }
 
@@ -203,27 +211,27 @@ L_col: for(int col = 0; col < cols; col++) {
 // replicate to 4 streams
 //
 void replicate_by4(
-	GRAY_IMAGE_HALF& img_in, 
-	GRAY_IMAGE_HALF& img_out0, 
-	GRAY_IMAGE_HALF& img_out1, 
-	GRAY_IMAGE_HALF& img_out2, 
-	GRAY_IMAGE_HALF& img_out3, 
-	int rows, 
-	int cols) {
+    GRAY_IMAGE_HALF& img_in,
+    GRAY_IMAGE_HALF& img_out0,
+    GRAY_IMAGE_HALF& img_out1,
+    GRAY_IMAGE_HALF& img_out2,
+    GRAY_IMAGE_HALF& img_out3,
+    int rows,
+    int cols) {
 
 GRAY_PIXEL pin;
 GRAY_PIXEL pout;
 
 L_row: for(int row = 0; row < rows; row++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1080
-		 
+
 L_col: for(int col = 0; col < cols; col++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1920
 #pragma HLS pipeline rewind
 
            img_in >> pin;
 
-		   pout = pin;
+           pout = pin;
 
            img_out0 << pout;
            img_out1 << pout;
@@ -238,26 +246,26 @@ L_col: for(int col = 0; col < cols; col++) {
 // replicate to 3 streams
 //
 void replicate_by3(
-	GRAY_IMAGE_HALF& img_in, 
-	GRAY_IMAGE_HALF& img_out0, 
-	GRAY_IMAGE_HALF& img_out1, 
-	GRAY_IMAGE_HALF& img_out2, 
-	int rows, 
-	int cols) {
+    GRAY_IMAGE_HALF& img_in,
+    GRAY_IMAGE_HALF& img_out0,
+    GRAY_IMAGE_HALF& img_out1,
+    GRAY_IMAGE_HALF& img_out2,
+    int rows,
+    int cols) {
 
 GRAY_PIXEL pin;
 GRAY_PIXEL pout;
 
 L_row: for(int row = 0; row < rows; row++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1080
-		 
+
 L_col: for(int col = 0; col < cols; col++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1920
 #pragma HLS pipeline rewind
 
            img_in >> pin;
 
-		   pout = pin;
+           pout = pin;
 
            img_out0 << pout;
            img_out1 << pout;
@@ -273,25 +281,25 @@ L_col: for(int col = 0; col < cols; col++) {
 //
 template<typename IMG_T, typename PIXEL_T>
 void replicate_by2(
-	IMG_T& img_in, 
-	IMG_T& img_out0, 
-	IMG_T& img_out1, 
-	int rows, 
-	int cols) {
+    IMG_T& img_in,
+    IMG_T& img_out0,
+    IMG_T& img_out1,
+    int rows,
+    int cols) {
 
 PIXEL_T pin;
 PIXEL_T pout;
 
 L_row: for(int row = 0; row < rows; row++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1080
-		 
+
 L_col: for(int col = 0; col < cols; col++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1920
 #pragma HLS pipeline rewind
 
            img_in >> pin;
 
-		   pout = pin;
+           pout = pin;
 
            img_out0 << pout;
            img_out1 << pout;
@@ -304,23 +312,23 @@ L_col: for(int col = 0; col < cols; col++) {
 //
 template<typename IMG_T, typename PIXEL_T>
 void passthru(
-	IMG_T& img_in, 
-	IMG_T& img_out, 
-	int rows, 
-	int cols) {
+    IMG_T& img_in,
+    IMG_T& img_out,
+    int rows,
+    int cols) {
 
 PIXEL_T pin;
 PIXEL_T pout;
 
 L_row: for(int row = 0; row < rows; row++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1080
-		 
+
 L_col: for(int col = 0; col < cols; col++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1920
 #pragma HLS pipeline rewind
 
            img_in >> pin;
-		   pout = pin;
+           pout = pin;
            img_out << pout;
         }
     }
@@ -332,27 +340,27 @@ L_col: for(int col = 0; col < cols; col++) {
 //
 template<typename IMG_T, typename PIXEL_T>
 void combine2(
-	IMG_T& img_in0, 
-	IMG_T& img_in1, 
-	IMG_T& img_out, 
-	int rows, 
-	int cols) {
+    IMG_T& img_in0,
+    IMG_T& img_in1,
+    IMG_T& img_out,
+    int rows,
+    int cols) {
 
 PIXEL_T pin0, pin1;
 PIXEL_T pout;
 
 L_row: for(int row = 0; row < rows; row++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1080
-		 
+
 L_col: for(int col = 0; col < cols; col++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1920
 #pragma HLS pipeline rewind
 
-	       img_in0 >> pin0;
-	       img_in1 >> pin1;
+           img_in0 >> pin0;
+           img_in1 >> pin1;
 
-		   pout = pin0 + pin1;
-		   img_out << pout;
+           pout = pin0 + pin1;
+           img_out << pout;
 
     }
 
@@ -364,39 +372,39 @@ L_col: for(int col = 0; col < cols; col++) {
 //
 template<typename IMG_T, typename PIXEL_T>
 void add_with_color(
-	IMG_T& img_in0, 
-	IMG_T& img_in1, 
-	IMG_T& img_out, 
-	int rows, 
-	int cols) {
+    IMG_T& img_in0,
+    IMG_T& img_in1,
+    IMG_T& img_out,
+    int rows,
+    int cols) {
 
 PIXEL_T pin0, pin1;
 PIXEL_T pout;
 
 L_row: for(int row = 0; row < rows; row++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1080
-		 
+
 L_col: for(int col = 0; col < cols; col++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1920
 #pragma HLS pipeline rewind
 
-	       img_in0 >> pin0;
-	       img_in1 >> pin1;
+           img_in0 >> pin0;
+           img_in1 >> pin1;
 
-		   if (pin0.val[0]>100 | pin0.val[1]>100 | pin0.val[2]>100) { // vertical edges
-			 pout.val[0] = 0;    // B
-			 pout.val[1] = 255;  // G
-			 pout.val[2] = 0;    // R
-	       } else if (pin1.val[0]>100 | pin1.val[1]>100 | pin1.val[2]>100) { // horizontal edges
-			 pout.val[0] = 0;
-			 pout.val[1] = 0;
-			 pout.val[2] = 255;
-	       } else {
-			 pout.val[0] = 0;
-			 pout.val[1] = 0;
-			 pout.val[2] = 0;
-		   }
-		   img_out << pout;
+           if (pin0.val[0]>100 | pin0.val[1]>100 | pin0.val[2]>100) { // vertical edges
+             pout.val[0] = 0;    // B
+             pout.val[1] = 255;  // G
+             pout.val[2] = 0;    // R
+           } else if (pin1.val[0]>100 | pin1.val[1]>100 | pin1.val[2]>100) { // horizontal edges
+             pout.val[0] = 0;
+             pout.val[1] = 0;
+             pout.val[2] = 255;
+           } else {
+             pout.val[0] = 0;
+             pout.val[1] = 0;
+             pout.val[2] = 0;
+           }
+           img_out << pout;
     }
 
 }
@@ -407,40 +415,40 @@ L_col: for(int col = 0; col < cols; col++) {
 // combine 4 streams
 //
 void combine4(
-	GRAY_IMAGE_HALF& img_in0, 
-	GRAY_IMAGE_HALF& img_in1, 
-	GRAY_IMAGE_HALF& img_in2, 
-	GRAY_IMAGE_HALF& img_in3, 
-	GRAY_IMAGE&      img_out, 
-	int rows, 
-	int cols) {
+    GRAY_IMAGE_HALF& img_in0,
+    GRAY_IMAGE_HALF& img_in1,
+    GRAY_IMAGE_HALF& img_in2,
+    GRAY_IMAGE_HALF& img_in3,
+    GRAY_IMAGE&      img_out,
+    int rows,
+    int cols) {
 
 GRAY_PIXEL pin;
 GRAY_PIXEL pout;
 
 L_row: for(int row = 0; row < rows; row++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1080
-		 
+
 L_col: for(int col = 0; col < cols; col++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1920
 #pragma HLS pipeline rewind
 
-        	if(row < rows/2) { 
-        			   if(col < cols/2) {    //-------------- top half/left half
+            if(row < rows/2) {
+                       if(col < cols/2) {    //-------------- top half/left half
                             img_in0 >> pin;
-        				    pout = pin;
-        		       } else {              //-------------- top half/right half
+                            pout = pin;
+                       } else {              //-------------- top half/right half
                             img_in1 >> pin;
-        				    pout = pin;
-        			   }
-        	} else {     
-        				if(col < cols/2) {   //-------------- bottom half/left half
+                            pout = pin;
+                       }
+            } else {
+                        if(col < cols/2) {   //-------------- bottom half/left half
                             img_in2 >> pin;
-        				    pout = pin;
-        		        } else {             //-------------- bottom half/right half
+                            pout = pin;
+                        } else {             //-------------- bottom half/right half
                             img_in3 >> pin;
-        				    pout = pin;
-        			    }
+                            pout = pin;
+                        }
             }
 
            img_out << pout;
@@ -476,7 +484,7 @@ hls::Filter2D <hls::BORDER_CONSTANT> (img_in, img_out, Sv, anchor);
 }
 
 //______________________________________________________________________________
-// gradient horizontal 
+// gradient horizontal
 //
 template<typename IMG_T>
 void grad_horizontal(IMG_T& img_in, IMG_T& img_out, int rows, int cols ) {
@@ -512,7 +520,7 @@ PIXEL_T pout;
 
 L_row: for(int row = 0; row < rows; row++) {
 #pragma HLS LOOP_TRIPCOUNT min=720 max=1080
-		 
+
 L_col: for(int col = 0; col < cols; col++) {
 #pragma HLS LOOP_TRIPCOUNT min=1280 max=1920
 #pragma HLS pipeline rewind
@@ -520,8 +528,8 @@ L_col: for(int col = 0; col < cols; col++) {
            img_in0 >> pin0;
            img_in1 >> pin1;
 
-		   //pout = (pin0 + pin1)/2;
-		   pout = (pin0 + pin1);
+           //pout = (pin0 + pin1)/2;
+           pout = (pin0 + pin1);
 
            img_out << pout;
         }
@@ -547,7 +555,7 @@ void image_filter_cf(AXI_STREAM& OUTPUT_STREAM, int rows, int cols) {
 #pragma HLS INTERFACE ap_stable port=cols
 
 #pragma HLS dataflow
-  
+
 RGB_IMAGE  img_0(rows, cols);
 //GRAY_IMAGE img_1(rows, cols);
 
@@ -579,17 +587,17 @@ if (frameCnt<nOfBlank) {
   pout.val[0]=0;
   pout.val[1]=0;
   pout.val[2]=frameCnt<<1;
-} 
+}
 
 
 L_row: for(int row = 0; row < rows; row++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1080
-		 
+
 L_col: for(int col = 0; col < cols; col++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=1920
 #pragma HLS pipeline rewind
 
-		   // streaming out
+           // streaming out
            img_out << pout;
         }
     }
@@ -618,7 +626,7 @@ void image_filter(AXI_STREAM& INPUT_STREAM, AXI_STREAM& OUTPUT_STREAM, int rows,
 #pragma HLS INTERFACE ap_stable port=cols
 
 #pragma HLS dataflow
-  
+
 RGB_IMAGE  img_0(rows, cols);
 GRAY_IMAGE img_1(rows, cols);
 
@@ -649,13 +657,13 @@ void image_filter_scale(AXI_STREAM& INPUT_STREAM, AXI_STREAM& OUTPUT_STREAM, int
 
 #pragma HLS INTERFACE s_axilite port=return   bundle=CONTROL_BUS
 
-// to make sure these does not play into synthesis 
+// to make sure these does not play into synthesis
 #pragma HLS INTERFACE ap_stable port=rows
 #pragma HLS INTERFACE ap_stable port=cols
 #pragma HLS INTERFACE ap_stable port=K
 
 #pragma HLS dataflow
-  
+
 assert(rows <= MAX_HEIGHT);
 assert(cols <= MAX_WIDTH);
 
@@ -692,7 +700,7 @@ void image_filter_yy(AXI_STREAM& INPUT_STREAM, AXI_STREAM& OUTPUT_STREAM, int ro
 #pragma HLS INTERFACE ap_stable port=cols
 
 #pragma HLS dataflow
-  
+
 RGB_IMAGE img_0(rows, cols);
 RGB_IMAGE img_0a(rows, cols);
 RGB_IMAGE img_0b(rows, cols);
@@ -735,7 +743,7 @@ void image_filter_xx(AXI_STREAM& INPUT_STREAM, AXI_STREAM& OUTPUT_STREAM, int ro
 #pragma HLS INTERFACE ap_stable port=cols
 
 #pragma HLS dataflow
-  
+
 RGB_IMAGE img_0(rows, cols);
 RGB_IMAGE img_0a(rows, cols);
 RGB_IMAGE img_0b(rows, cols);
@@ -777,41 +785,41 @@ RGB_PIXEL pout;
 
 L_row: for(int row = 0; row < rows; row++) {
 #pragma HLS LOOP_TRIPCOUNT min=720 max=1080
-		 
+
 L_col: for(int col = 0; col < cols; col++) {
 #pragma HLS LOOP_TRIPCOUNT min=1280 max=1920
 #pragma HLS pipeline rewind
 
-		    // streaming in
+            // streaming in
             img_in >> pin;
 
-        	if(row < rows/2) { 
-        			   if(col < cols/2) { //-------------- top half/left half
-        			        //switch red and green
-        				    pout.val[0] = pin.val[0];
-        				    pout.val[1] = pin.val[2];
-        				    pout.val[2] = pin.val[1];
-        		       } else {              //-------------- top half/right half
-        			        //switch red and blue
-        				    pout.val[0] = pin.val[2];
-        				    pout.val[1] = pin.val[1];
-        				    pout.val[2] = pin.val[0];
-        			   }
-        	} else {     
-        				if(col < cols/2) { // ------------------ bottom half/left half
-        			        //switch green and blue
-        				    pout.val[0] = pin.val[1];
-        				    pout.val[1] = pin.val[0];
-        				    pout.val[2] = pin.val[2];
-        		        } else {             // ------------------ bottom half/right half
-        			        //don't switch
-        				    pout.val[0] = pin.val[0];
-        				    pout.val[1] = pin.val[1];
-        				    pout.val[2] = pin.val[2];
-        			    }
+            if(row < rows/2) {
+                       if(col < cols/2) { //-------------- top half/left half
+                            //switch red and green
+                            pout.val[0] = pin.val[0];
+                            pout.val[1] = pin.val[2];
+                            pout.val[2] = pin.val[1];
+                       } else {              //-------------- top half/right half
+                            //switch red and blue
+                            pout.val[0] = pin.val[2];
+                            pout.val[1] = pin.val[1];
+                            pout.val[2] = pin.val[0];
+                       }
+            } else {
+                        if(col < cols/2) { // ------------------ bottom half/left half
+                            //switch green and blue
+                            pout.val[0] = pin.val[1];
+                            pout.val[1] = pin.val[0];
+                            pout.val[2] = pin.val[2];
+                        } else {             // ------------------ bottom half/right half
+                            //don't switch
+                            pout.val[0] = pin.val[0];
+                            pout.val[1] = pin.val[1];
+                            pout.val[2] = pin.val[2];
+                        }
             }
 
-		   // streaming out
+           // streaming out
            img_out << pout;
         }
     }
@@ -828,19 +836,19 @@ RGB_PIXEL pout;
 
 L_row: for(int row = 0; row < rows; row++) {
 #pragma HLS LOOP_TRIPCOUNT min=720 max=1080
-		 
+
 L_col: for(int col = 0; col < cols; col++) {
 #pragma HLS LOOP_TRIPCOUNT min=1280 max=1920
 #pragma HLS pipeline rewind
 
-		   // streaming in
+           // streaming in
            img_in >> pin;
 
-		   pout.val[0] = K * pin.val[0];
-		   pout.val[1] = K * pin.val[1];
-		   pout.val[2] = K * pin.val[2];
+           pout.val[0] = K * pin.val[0];
+           pout.val[1] = K * pin.val[1];
+           pout.val[2] = K * pin.val[2];
 
-		   // streaming out
+           // streaming out
            img_out << pout;
         }
     }
@@ -857,14 +865,14 @@ RGB_PIXEL pout;
 
 L_row: for(int row = 0; row < rows; row++) {
 #pragma HLS LOOP_TRIPCOUNT min=720 max=1080
-		 
+
 L_col: for(int col = 0; col < cols; col++) {
 #pragma HLS LOOP_TRIPCOUNT min=1280 max=1920
 #pragma HLS pipeline rewind
 
            img_in >> pin;
 
-		   pout = pin;
+           pout = pin;
 
            img_out0 << pout;
            img_out1 << pout;
